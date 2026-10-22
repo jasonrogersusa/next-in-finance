@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[Excel]lent Portrait — Real-Time Quantitative Spreadsheet Camera</title>
+    <link
+      rel="stylesheet"
+      href="./Ref Website/Spreadsheet Webcam — Real-Time Google Sheets Pixel Camera_files/index-CBZ5oANt.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="bg-[#080A0F] text-[#E2E8F0] select-none overflow-hidden">
+    <input id="input-upload-photo" type="file" accept="image/*" class="hidden" />
+
+    <!-- Toast Notification -->
+    <div
+      id="toast-notification"
+      class="hidden fixed top-14 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-[#064E3B] border border-[#00FF88] text-[#E2E8F0] text-xs font-semibold shadow-2xl max-w-2xl truncate"
+    ></div>
+
+    <div class="flex flex-col w-screen h-screen overflow-hidden">
+      <!-- ===================================================================
+           1. HEADER: Brand, Industry Focus Switcher & Quick Exports
+           =================================================================== -->
+      <header class="bg-[#10131C] border-b border-[#202738] px-3.5 py-2 flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div
+            class="w-9 h-9 rounded-lg bg-[#107C41] flex items-center justify-center text-white shadow-md shrink-0 border border-[#22C55E]/40"
+          >
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+              <path d="M8 13h2M14 13h2M8 17h2M14 17h2" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-sm sm:text-base font-bold text-white">
+                [Excel]lent_Portrait.xlsx
+              </h1>
+              <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#064E3B]/80 text-[#00FF88] border border-[#059669]/60">
+                Gemini Quantitative Engine
+              </span>
+            </div>
+            <p class="text-[11px] text-[#94A3B8]">
+              Live self-portraits &amp; animated quantitative visualizations rendered cell-by-cell in Excel
+            </p>
+          </div>
+        </div>
+
+        <!-- Center: Industry Selector (Capital Markets | Banking | Insurance) -->
+        <div class="flex items-center gap-2">
+          <span class="hidden md:inline text-[11px] text-[#94A3B8] font-medium">Industry Focus:</span>
+          <div id="industry-selector-group" class="flex items-center gap-1.5"></div>
+        </div>
+
+        <!-- Right: Snapshot & Export Buttons -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            id="btn-copy-sheets"
+            class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-[#161F30] hover:bg-[#1E2B42] border border-[#2C3A52] text-[#7DD3FC] rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            title="Copy colored financial spreadsheet to paste directly into Google Sheets or Excel"
+          >
+            <span>📋 Copy for Sheets</span>
+          </button>
+          <button
+            type="button"
+            id="btn-dl-excel"
+            class="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 bg-[#132E22] hover:bg-[#1A3D2E] border border-[#1B5E3C] text-[#6EE7B7] rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            title="Download colored .XLS spreadsheet file"
+          >
+            <span>📊 Export .XLS</span>
+          </button>
+          <button
+            type="button"
+            id="btn-dl-png"
+            class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-[#16273C] hover:bg-[#1E3552] border border-[#1E4B7A] text-[#7DD3FC] rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            title="Save high-resolution PNG snapshot"
+          >
+            <span>🖼️ Save PNG</span>
+          </button>
+          <button
+            type="button"
+            id="btn-take-snapshot"
+            class="flex items-center gap-1.5 px-3 py-1.5 bg-[#107C41] hover:bg-[#0D6B37] text-white rounded-lg text-xs font-semibold shadow-sm transition-colors cursor-pointer"
+          >
+            <span>📸 Snapshot</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ===================================================================
+           2. LIVE MARKET STREAM, SENTIMENT SLIDER & CONNECTOR DATA SOURCES
+           =================================================================== -->
+      <div class="bg-[#0C0F17] border-b border-[#1E2536] px-3.5 py-1.5 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
+        <div class="flex items-center gap-3 flex-wrap">
+          <div class="flex items-center gap-2 font-mono-code text-[11px] bg-[#131824] px-2.5 py-1 rounded border border-[#232B3E]">
+            <span class="w-2 h-2 rounded-full bg-[#00FF88] animate-pulse"></span>
+            <span id="live-idx1-label" class="text-[#94A3B8]">S&P 500:</span>
+            <span id="live-idx1-val" class="font-bold text-white">5,842.47</span>
+            <span class="text-[#475569]">|</span>
+            <span id="live-idx2-label" class="text-[#94A3B8]">NASDAQ 100:</span>
+            <span id="live-idx2-val" class="text-[#38BDF8] font-semibold">20,314.80</span>
+          </div>
+
+          <div
+            class="flex items-center gap-2 bg-[#131824] px-2.5 py-1 rounded border border-[#232B3E]"
+            title="Simulate market shifts from Bear Crash (-5%) to Bull Rally (+5%) to dynamically transform the portrait & quantitative animations"
+          >
+            <span class="text-[11px] text-[#94A3B8] font-medium">Market Shock:</span>
+            <span class="text-[10px] text-[#F87171] font-mono-code">Bear -5%</span>
+            <input
+              id="slider-market-sentiment"
+              type="range"
+              min="-5"
+              max="5"
+              step="0.2"
+              value="0"
+              class="w-24"
+            />
+            <span class="text-[10px] text-[#00FF88] font-mono-code">Bull +5%</span>
+            <span id="label-market-sentiment" class="font-mono-code text-xs font-bold text-[#CBD5E1] w-11 text-right">
+              +0.0%
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 overflow-x-auto">
+          <span class="text-[11px] text-[#94A3B8] font-medium shrink-0">Connected Sources:</span>
+          <div id="connectors-strip" class="flex items-center gap-1"></div>
+        </div>
+      </div>
+
+      <!-- Scrolling Industry Ticker Tape -->
+      <div class="bg-[#090B10] border-b border-[#192030] overflow-hidden py-0.5 shrink-0">
+        <div id="live-ticker-track" class="ticker-track"></div>
+      </div>
+
+      <!-- ===================================================================
+           3. PORTRAIT & ANIMATED QUANTITATIVE VISUALIZATION TOOLBAR
+           =================================================================== -->
+      <div class="bg-[#131722] border-b border-[#22293A] px-3.5 py-1.5 flex items-center gap-2.5 overflow-x-auto text-xs shrink-0">
+        <!-- Primary Scene / Canvas Mode Selector -->
+        <div class="flex items-center gap-1.5 pr-2.5 border-r border-[#252D40]">
+          <button type="button" id="btn-webcam-status"></button>
+          <select
+            id="select-scene-mode"
+            class="bg-[#141E30] border border-[#38BDF8]/60 rounded px-2.5 py-1 text-xs font-semibold text-white outline-none cursor-pointer shadow-xs"
+            title="Switch between your Live Webcam Self-Portrait and 5 Animated Quantitative Financial Visualizations rendered cell-by-cell in Excel"
+          >
+            <option value="webcam" selected>📹 Live Webcam (Self-Portrait)</option>
+            <option value="vol_surface_3d">🌊 3D Implied Volatility &amp; Yield Surface Wave</option>
+            <option value="lorenz_attractor">🦋 Quantitative Lorenz Chaos Attractor (3D)</option>
+            <option value="capital_globe">🌐 Global Capital Flow &amp; Liquidity Sphere (3D)</option>
+            <option value="bull_candlesticks">🐂 Wall Street Bull &amp; Live Candlestick Pulse</option>
+            <option value="quant_skyline">🏙️ Institutional Order-Book Skyline &amp; Market Rain</option>
+            <option value="upload">📁 Upload Custom Photo...</option>
+          </select>
+          <button
+            type="button"
+            id="btn-pause-stream"
+            class="px-2 py-1 rounded bg-[#1A2030] hover:bg-[#232B3E] border border-[#2E384D] text-[#CBD5E1] text-xs font-medium cursor-pointer"
+          >
+            ⏸ Freeze
+          </button>
+          <button
+            type="button"
+            id="btn-repaint-cells"
+            class="px-2 py-1 rounded bg-[#107C41]/30 hover:bg-[#107C41]/50 border border-[#10B981]/50 text-[#6EE7B7] text-xs font-semibold cursor-pointer"
+            title="Animate Gemini computing & painting the spreadsheet cell-by-cell"
+          >
+            ✨ Paint
+          </button>
+        </div>
+
+        <!-- Cell Financial Data Mode -->
+        <div class="flex items-center gap-1.5 pr-2.5 border-r border-[#252D40]">
+          <span class="text-[#94A3B8] text-[11px] font-medium">Cell Values:</span>
+          <select
+            id="select-cell-mode"
+            class="bg-[#1A2030] border border-[#2E384D] rounded px-2 py-1 text-xs font-medium text-[#00FF88] outline-none cursor-pointer"
+          >
+            <option value="quant_auto" selected>⚡ Live Quant Output (DCF • Greeks • VaR)</option>
+            <option value="industry_metric">Industry Metric (P/E • CET1% • CR%)</option>
+            <option value="ticker_delta">Ticker + Live % (NVDA +4%)</option>
+            <option value="credit_rating">Moody's Rating (JPM Aa2)</option>
+            <option value="sparkline">In-Cell Sparklines (▁▂▄▆█)</option>
+            <option value="formula">Excel Formulas (=AAPL)</option>
+            <option value="none">Clean Color Cells Only</option>
+          </select>
+        </div>
+
+        <!-- Palette -->
+        <div class="flex items-center gap-1.5 pr-2.5 border-r border-[#252D40]">
+          <span class="text-[#94A3B8] text-[11px] font-medium">Palette:</span>
+          <select
+            id="select-palette"
+            class="bg-[#1A2030] border border-[#2E384D] rounded px-2 py-1 text-xs font-medium text-[#F1F5F9] outline-none cursor-pointer"
+          >
+            <option value="truecolor_pro" selected>🌈 TrueColor Studio (Best Recognition)</option>
+            <option value="executive_emerald">🦋 Excel Model Emerald &amp; Cyan</option>
+            <option value="gemini_gold">🔥 Gemini Gold &amp; Indigo</option>
+            <option value="halftone_editorial">📰 Editorial B&amp;W Print</option>
+            <option value="alpha_heatmap">📈 FinViz Alpha Heatmap</option>
+            <option value="moodys_cobalt">🏦 Moody's Institutional Cobalt</option>
+            <option value="bloomberg_amber">💻 Bloomberg Terminal Amber</option>
+          </select>
+        </div>
+
+        <!-- Grid Density -->
+        <div class="flex items-center gap-1.5 pr-2.5 border-r border-[#252D40]">
+          <span class="text-[#94A3B8] text-[11px] font-medium">Grid:</span>
+          <select
+            id="select-grid-res"
+            class="bg-[#1A2030] border border-[#2E384D] rounded px-2 py-1 text-xs font-medium text-[#E2E8F0] outline-none cursor-pointer"
+          >
+            <option value="52x38">Medium (52 × 38)</option>
+            <option value="76x54" selected>Crisp (76 × 54)</option>
+            <option value="96x68">HD (96 × 68)</option>
+            <option value="116x82">Ultra-Fine (116 × 82)</option>
+          </select>
+        </div>
+
+        <!-- Facial Clarity & Text Blend Sliders -->
+        <div class="flex items-center gap-3 pr-2.5 border-r border-[#252D40]">
+          <div class="flex items-center gap-1.5" title="Sharpens eyes, glasses, and facial contours">
+            <span class="text-[11px] text-[#94A3B8]">Clarity:</span>
+            <input id="slider-face-clarity" type="range" min="0" max="100" value="72" class="w-14" />
+            <span id="label-face-clarity" class="font-mono-code text-[11px] text-[#00FF88] w-7">72%</span>
+          </div>
+
+          <div class="flex items-center gap-1.5" title="Controls contrast of cell numbers against cell fill">
+            <span class="text-[11px] text-[#94A3B8]">Text:</span>
+            <input id="slider-text-blend" type="range" min="15" max="95" value="42" class="w-14" />
+            <span id="label-text-blend" class="font-mono-code text-[11px] text-[#38BDF8] w-7">42%</span>
+          </div>
+        </div>
+
+        <!-- Smart Feature Toggles -->
+        <div class="flex items-center gap-1.5 ml-auto">
+          <button
+            type="button"
+            id="btn-toggle-loupe"
+            class="px-2.5 py-1 rounded text-xs font-medium border bg-[#16273C] text-[#38BDF8] border-[#38BDF8]/60 cursor-pointer"
+            title="Magnify cells under cursor to inspect live DCF, Monte Carlo & Black-Scholes calculations"
+          >
+            🔍 Loupe
+          </button>
+          <button
+            type="button"
+            id="btn-toggle-merge"
+            class="px-2.5 py-1 rounded text-xs font-medium border bg-[#064E3B] text-[#00FF88] border-[#059669] cursor-pointer"
+            title="Merges flat background cells 2x1 for wider quantitative outputs while keeping high-detail areas 1x1 crisp"
+          >
+            ⊞ Smart Merge
+          </button>
+
+          <div class="flex items-center gap-1 pl-1">
+            <button
+              type="button"
+              id="btn-zoom-out"
+              class="px-2 py-0.5 rounded bg-[#1A2030] hover:bg-[#252E42] text-[#94A3B8] hover:text-white cursor-pointer"
+            >
+              −
+            </button>
+            <span id="label-zoom" class="font-mono-code text-[11px] w-10 text-center text-[#CBD5E1]">100%</span>
+            <button
+              type="button"
+              id="btn-zoom-in"
+              class="px-2 py-0.5 rounded bg-[#1A2030] hover:bg-[#252E42] text-[#94A3B8] hover:text-white cursor-pointer"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           4. EXCEL FORMULA BAR (fx) SHOWING LIVE QUANTITATIVE EQUATIONS
+           =================================================================== -->
+      <div class="bg-[#0F131C] border-b border-[#1E2536] px-3.5 py-1 flex items-center gap-2 text-xs shrink-0">
+        <input
+          id="formula-cell-address"
+          type="text"
+          value="AK25"
+          readonly
+          class="w-16 px-2 py-0.5 border border-[#2B3348] bg-[#161B28] rounded text-center font-mono-code font-semibold text-xs text-[#00FF88] outline-none"
+        />
+        <div class="h-4 w-px bg-[#252D40]"></div>
+        <span class="font-serif italic font-bold text-sm text-[#38BDF8] px-1">fx</span>
+        <div class="h-4 w-px bg-[#252D40]"></div>
+        <div class="flex-1 flex items-center gap-2 px-2 py-0.5 bg-[#0A0D14] border border-[#1E2536] rounded overflow-hidden">
+          <span
+            id="formula-color-swatch"
+            class="w-3.5 h-3.5 rounded-xs shrink-0 border border-white/25"
+            style="background-color: #10b981"
+          ></span>
+          <input
+            id="formula-bar-input"
+            type="text"
+            readonly
+            value='=GEMINI.DCF("NVDA", FCF:$64.2B, WACC:8.84%, g:3.12%) // Implied: $148.20 (+6.9% vs Spot)'
+            class="w-full bg-transparent font-mono-code text-xs text-[#F1F5F9] outline-none truncate"
+          />
+          <div
+            id="formula-cell-meta"
+            class="hidden md:flex items-center gap-1.5 text-[11px] font-mono-code shrink-0 text-[#94A3B8]"
+          ></div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           5. FULL-SCREEN SPREADSHEET CANVAS
+           =================================================================== -->
+      <main class="flex-1 flex flex-col overflow-hidden relative">
+        <div
+          id="spreadsheet-grid-container"
+          class="flex-1 w-full h-full overflow-auto bg-[#080A0F] relative outline-none"
+        >
+          <canvas id="spreadsheet-webcam-canvas" class="cursor-cell"></canvas>
+        </div>
+
+        <!-- Bottom Sheet Tabs & Live Compute Throughput Bar -->
+        <div class="bg-[#10131C] border-t border-[#202738] px-3.5 py-1 flex items-center justify-between text-xs shrink-0">
+          <div id="sheet-tabs-container" class="flex items-center gap-1 overflow-x-auto"></div>
+          <div class="flex items-center gap-3 font-mono-code text-[11px] text-[#94A3B8]">
+            <span>Hover any cell to inspect live Gemini quantitative math</span>
+            <div class="flex items-center gap-1 text-[#00FF88] bg-[#064E3B]/60 px-2 py-0.5 rounded border border-[#059669]/60">
+              <span id="status-fps">30 FPS • 123,120 Quant Calcs/s</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="./financial-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

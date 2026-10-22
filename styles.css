@@ -1,0 +1,126 @@
+/* ==========================================================================
+   [Excel]lent Portrait — Custom Styles & Animations
+   ========================================================================== */
+
+:root {
+  --bg-dark: #090b10;
+  --bg-panel: #11141d;
+  --bg-panel-elevated: #171b26;
+  --border-subtle: #23293a;
+  --emerald-excel: #107c41;
+  --neon-green: #00ff88;
+  --gemini-blue: #38bdf8;
+  --gemini-purple: #a855f7;
+  --amber-gold: #f59e0b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+.font-mono-code {
+  font-family: "JetBrains Mono", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d1017;
+}
+::-webkit-scrollbar-thumb {
+  background: #283044;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3b4663;
+}
+
+/* Ticker Tape Animation */
+@keyframes tickerMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: tickerMove 42s linear infinite;
+}
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* Pulse & Glow effects */
+@keyframes softPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 2s ease-in-out infinite;
+}
+
+@keyframes geminiGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gemini-badge-gradient {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(56, 189, 248, 0.25), rgba(168, 85, 247, 0.2));
+  background-size: 200% 200%;
+  animation: geminiGradient 6s ease infinite;
+}
+
+/* Range Input Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #1e2433;
+  height: 6px;
+  border-radius: 4px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #00ff88;
+  cursor: pointer;
+  border: 2px solid #090b10;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+/* Step Pill active state */
+.step-pill-active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(56, 189, 248, 0.18));
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
+}
