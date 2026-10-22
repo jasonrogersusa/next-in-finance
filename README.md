@@ -1,5 +1,7 @@
 # [Excel]lent Portrait — Gemini Financial Canvas
 
+**Live Demo:** [https://jasonrogersusa.github.io/next-in-finance/](https://jasonrogersusa.github.io/next-in-finance/)
+
 **Financial Services × Google Cloud Next**  
 An interactive, real-time 60 FPS spreadsheet webcam and quantitative visualization engine powered by live multi-source financial formulas (`S&P Capital IQ`, `Moody's CreditView`, `PitchBook`, `SEC EDGAR 10-K`, and `FactSet`).
 
